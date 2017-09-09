@@ -37,58 +37,45 @@ LedControl lc_target = LedControl(3, 1, 2, 1);
 
 
 
-int button_1_inputPin = 8;         // the number of the input pin for button #1
+int command_buttoninputPin = ????;     // the number of the input pin for command button
 
-int button_2_inputPin = 9;         // the number of the input pin for button #2
-int button_2_outputPin = 3;       // the number of the output pin LED for button #2
+int onoff_button_inputPin = ????;      // the number of the input pin for run/stop switch
+int tmr_switch_inputPin = ????;        // the number of the input pin for the timer on y/n switch
+int rpt_swith_inputPin = ????;         // the number of the input pin for the repeat commands y/n swtich 
+int tbd_swith_inputPin = ????;         // the number of the input pin for the TBD
 
-int state_1 = HIGH;      // the current state of the output pin for button #1
-int state_2 = HIGH;      // the current state of the output pin for button #1
-int reading_1;           // the current reading from the input pin for button #1
-int previous_1 = LOW;    // the previous reading from the input pin for button #1
-int reading_2;           // the current reading from the input pin for button #2
-int previous_2 = LOW;    // the previous reading from the input pin for button #2
 
-// the follow variables are long's because the time, measured in miliseconds,
-// will quickly become a bigger number than can be stored in an int.
-long time = 0;         // the last time the output pin was toggled
-long debounce = 200;   // the debounce time, increase if the output flickers
+
+
+//int state_1 = HIGH;      // the current state of the output pin for button #1
+//int state_2 = HIGH;      // the current state of the output pin for button #1
+//int reading_1;           // the current reading from the input pin for button #1
+//int previous_1 = LOW;    // the previous reading from the input pin for button #1
+//int reading_2;           // the current reading from the input pin for button #2
+//int previous_2 = LOW;    // the previous reading from the input pin for button #2
+//
+//// the follow variables are long's because the time, measured in miliseconds,
+//// will quickly become a bigger number than can be stored in an int.
+//long time = 0;         // the last time the output pin was toggled
+//long debounce = 200;   // the debounce time, increase if the output flickers
 
 
  
 void setup()
 {
-  // Reet timer display
-  lc_timer.shutdown(0,false); // turn on the timer display
-  lc_timer.setIntensity(0,8); // medium brightness
-  lc_timer.clearDisplay(0);   // clear display
-  
-  lc_timer.setChar(0,0,9,false);
-  lc_timer.setChar(0,1,9,false);
+  // Reset timer display
+  lc_timer.shutdown(0,false);      // turn on the timer display
+  lc_timer.setIntensity(0,8);      // medium brightness
+  lc_timer.clearDisplay(0);        // clear display
+  lc_timer.setChar(0,0,'-',false); // set timer digit #0 to --
+  lc_timer.setChar(0,1,'-',false); // set timer digit #1 to --
 
 
-
-
-
-
-
-
-
-
-  
-  // Set up buttons #1 and #2
-  pinMode(button_1_inputPin, INPUT);
-  pinMode(button_2_inputPin, INPUT);
-  pinMode(button_1_outputPin, OUTPUT);
-  pinMode(button_2_outputPin, OUTPUT);
-  
-  // Write title screen
-  lcd.begin(16, 2);
-  lcd.setCursor(4,0);   
-  lcd.print("BABBAGE.");
-
+  // Reset target display
   lc_target.shutdown(0, false);  // turns on display
   lc_target.setIntensity(0, 15); // 15 = brightest
+
+  
   lc_target.setDigit(0, 0, 9, false);
   lc_target.setDigit(0, 1, 8, false);
   lc_target.setDigit(0, 2, 7, false);
@@ -99,14 +86,29 @@ void setup()
   lc_target.setDigit(0, 7, 2, false);
 
   
-  
-  // lcd.write(byte(0)); // when calling lcd.write() '0' must be cast as a byte
-  
-  // lcd.setCursor(0, 1);
-  // lcd.print("");
+  // Set up input/output pins for command button
+  pinMode(command_buttoninputPin, INPUT);
+  pinMode(command_buttoninputPin, OUTPUT);
 
-  // initialize digital pin LED_BUILTIN as an output.
-  //pinMode(9, OUTPUT);
+  // Set up input pins
+  pinMode(onoff_button_inputPin, INPUT);
+  pinMode(tmr_switch_inputPin, INPUT);
+  pinMode(rpt_swith_inputPin, INPUT);
+  pinMode(tbd_swith_inputPin, INPUT);
+
+
+  
+  
+  // Reset title screen for 16x2
+  lcd.begin(16, 2);
+  lcd.setCursor(4,0);   
+  lcd.print("BABBAGE.");
+
+  
+
+
+
+
 
   
 }
