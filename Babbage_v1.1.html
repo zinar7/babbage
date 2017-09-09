@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+
+<!--v1.1:-->
+
+
+<head>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;    	
+}
+</style>
+</head>
+
+<body>
+<center>
+
+<table style="width:60%; font-size:150px; font-family:verdana;" id="byte_table">
+  <tr>
+	<th id="bit_1">--</th>
+	<th id="bit_2">--</th>
+	<th id="bit_3">--</th>
+	<th id="bit_4">--</th>
+  </tr>
+</table>
+
+<img src="Babbage.png" id="logo">
+
+<p id="instruction_text">Click the button to generate the next command from BABBAGE.</p>
+
+<button onclick="Babbage()" id="command_button">NEXT COMMAND</button>
+<button onclick="Reset()" id="reboot_button">RESET</button>
+
+<progress value="0" max="10" id="progress_bar"></progress><p id="count_text">AA</p>
+
+<font size="20"><p id="command_text"></p></font>
+<font size="20"><p id="demo"></p></font>
+
+<p id="start_text">Ignore repeated commands? <input type="checkbox" id="chk_cmd_repeat" value="No"></p>
+<p id="start_text_2">Countdown timer?
+<select id="select_count">
+  <option value="count_off">OFF</option>
+  <option value="count_5">5 seconds</option>
+  <option value="count_10">10 seconds</option>
+  <option value="count_15">15 seconds</option>
+</select></p>
+
+<button onclick="Start()" id="start_button">START</button>
+
+
+
+
+
+
+<script>
+
+// Make the 'last_cmd' and 'new_cmd' variables global so that they can be saved from one command to the next; set as null for now
+var last_cmd
+var new_cmd
+
+// Variable to define whether commands are allowed to repeat or not
+var repeat_yn
+
+// Do not display target byte on page initialisation - wait for user to click 'START'
+document.getElementById('byte_table').style.display = 'none';
+document.getElementById('instruction_text').style.display = 'none';
+document.getElementById('command_button').style.display = 'none';
+document.getElementById('reboot_button').style.display = 'none';
+document.getElementById('progress_bar').style.display = 'none';
+document.getElementById('count_text').style.display = 'none';
+
+
+
+function Start()
+{
+	// Get value of checkbox to figure out whether commands can repeat or not
+	var repeat_yn = document.getElementById('chk_cmd_repeat').checked;
+
+	// Get value of drop-down menu to figure out whether an auto-timer is applied or not
+	var countdown_yn = document.getElementById('select_count').value
+
+	if (countdown_yn == "count_off")
+	{
+		// Turn off countdown timer
+		document.getElementById("progress_bar").style.display = 'none';
+
+		document.getElementById('command_button').style.display = 'block';
+
+		countdown_yn = 0;
+	}
+	else
+	{
+		// Display progress bar
+		document.getElementById("progress_bar").style.display = 'block';
+		document.getElementById('count_text').style.display = 'block';
+
+		
+		
+		// Change length of progress bar
+		if (countdown_yn == "count_5")
+		{
+			document.getElementById('progress_bar').max = 5;
+			
+		}
+		else if (countdown_yn == "count_10")
+		{
+			document.getElementById('progress_bar').max = 10;
+		}
+		else if (countdown_yn == "count_15")
+		{
+			document.getElementById('progress_bar').max = 15;
+		}
+		
+		countdown_yn = 1;
+	
+	}
+
+	document.getElementById('logo').style.display = 'none';
+	document.getElementById('start_text').style.display = 'none';
+	document.getElementById('start_text_2').style.display = 'none';
+	document.getElementById('byte_table').style.display = 'inline';
+	document.getElementById('instruction_text').style.display = 'block';
+
+	document.getElementById('reboot_button').style.display = 'block';
+	document.getElementById('start_button').style.display = 'none';
+	
+
+	// Generate new target byte
+	Reboot_All()
+	
+	// Give players a 10-second countdown
+	//Start_Countdown(10)
+
+
+
+
+	if (countdown_yn = 1)
+	{	
+
+		// Set up progress bar
+		var maxtime = document.getElementById('progress_bar').max;
+		var timeleft = maxtime + 1;
+
+	
+		setInterval(function() {
+  			Babbage();
+		}, (maxtime+1)*1000);
+		
+		setInterval(function() {
+			--timeleft
+			document.getElementById("progress_bar").value = timeleft;
+			document.getElementById("count_text").innerHTML = timeleft;
+
+			
+			
+		  	if (timeleft <= 0)
+			{
+				timeleft = maxtime + 1;
+				
+			}
+			
+			
+		}, 1000);		
+	}
+}
+
+
+
+
+function Start_Countdown(count)
+{
+
+	// Set up progress bar
+
+	var countdownTimer = setInterval(function(){
+	
+  	
+	//document.getElementById("command_text").innerHTML = cmd_bab;
+	
+  	if(timeleft <= 0)	
+  	  clearInterval(countdownTimer);
+	},1000);
+}
+
+
+function Get_Cmd(x)
+
+{
+
+// Reset all font colours to black (in case they got rebooted)
+var yy = document.getElementById('bit_1');
+yy.style.color = '#000000';
+
+var yy = document.getElementById('bit_2');
+yy.style.color = '#000000';
+
+var yy = document.getElementById('bit_3');
+yy.style.color = '#000000';
+
+var yy = document.getElementById('bit_4');
+yy.style.color = '#000000';
+
+if (x == 1) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 2) {
+   	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 3) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 4) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 5) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 6) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 7) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+else if (x == 8) {
+	cmd_bab = "EXCHANGE ANY (CPU)";
+	new_cmd = 111;
+}
+
+
+
+else if (x == 9) {
+	cmd_bab = "FLIP: ANY";
+	new_cmd = 112;
+}
+else if (x == 10) {
+	cmd_bab = "FLIP: ANY";
+	new_cmd = 112;
+}
+
+else if (x == 11) {
+	cmd_bab = "FLIP: Block 1";
+	new_cmd = 112;
+}
+else if (x == 12) {
+	cmd_bab = "FLIP: Block 2";
+	new_cmd = 112;
+}
+else if (x == 13) {
+	cmd_bab = "FLIP: Block 3";
+	new_cmd = 112;
+}
+else if (x == 14) {
+	cmd_bab = "FLIP: Block 4";
+	new_cmd = 112;
+}
+
+
+
+
+else if (x == 15) {
+	cmd_bab = "SWAP: ADJACENT";
+	new_cmd = 121;
+}
+else if (x == 16) {
+	cmd_bab = "SWAP: ADJACENT";
+	new_cmd = 121;
+}
+else if (x == 17) {
+	cmd_bab = "SWAP: NON-ADJACENT";
+	new_cmd = 121;
+}
+else if (x == 18) {
+	cmd_bab = "SWAP: NON-ADJACENT";
+	new_cmd = 121;
+}
+
+
+else if (x == 19) {
+	cmd_bab = "SWAP: Block 1 & Block 2";
+	new_cmd = 121;
+}
+else if (x == 20) {
+	cmd_bab = "SWAP: Block 2 & Block 3";
+	new_cmd = 121;
+}
+else if (x == 21) {
+	cmd_bab = "SWAP: Block 3 & Block 4";
+	new_cmd = 121;
+}
+else if (x == 22) {
+	cmd_bab = "SWAP: ANY";
+	new_cmd = 121;
+}
+else if (x == 23) {
+	cmd_bab = "SWAP: ANY";
+	new_cmd = 121;
+}
+
+else if (x == 24) {
+	cmd_bab = "PASS: ANY (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 25) {
+	cmd_bab = "PASS: ANY (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 26) {
+	cmd_bab = "PASS: ANY (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 27) {
+	cmd_bab = "PASS: ANY (RIGHT)";
+	new_cmd = 132;
+}
+else if (x == 28) {
+	cmd_bab = "PASS: ANY (RIGHT)";
+	new_cmd = 131;
+}
+else if (x == 29) {
+	cmd_bab = "PASS: ANY (RIGHT)";
+	new_cmd = 131;
+}
+else if (x == 30) {
+	cmd_bab = "PASS: Block 1 (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 31) {
+	cmd_bab = "PASS: Block 2 (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 32) {
+	cmd_bab = "PASS: Block 3 (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 33) {
+	cmd_bab = "PASS: Block 4 (LEFT)";
+	new_cmd = 131;
+}
+else if (x == 34) {
+	cmd_bab = "PASS: Block 1 (RIGHT)";
+	new_cmd = 131;
+}
+else if (x == 35) {
+	cmd_bab = "PASS: Block 2 (RIGHT)";
+	new_cmd = 131;
+}
+else if (x == 36) {
+	cmd_bab = "PASS: Block 3 (RIGHT)";
+	new_cmd = 131;
+}
+else if (x == 37) {
+	cmd_bab = "PASS: Block 4 (RIGHT)";
+	new_cmd = 131;
+}
+
+else if (x == 38) {
+	cmd_bab = "EXCHANGE: Block 1 (CPU)";
+	new_cmd = 141;
+}
+else if (x == 39) {
+	cmd_bab = "EXCHANGE: Block 2 (CPU)";
+	new_cmd = 141;
+}
+else if (x == 40) {
+	cmd_bab = "EXCHANGE: Block 3 (CPU)";
+	new_cmd = 141;
+}
+else if (x == 41) {
+	cmd_bab = "EXCHANGE: Block 4 (CPU)";
+	new_cmd = 141;
+}
+else if (x == 42) {
+	cmd_bab = "EXCHANGE: ANY (CPU)";
+	new_cmd = 141;
+}
+
+
+else if (x == 43) {
+	cmd_bab = "STEAL: LEFT";
+	new_cmd = 142;
+}
+else if (x == 44) {
+	cmd_bab = "STEAL: LEFT";
+	new_cmd = 142;
+}
+else if (x == 45) {
+	cmd_bab = "STEAL: LEFT";
+	new_cmd = 142;
+}
+else if (x == 46) {
+	cmd_bab = "STEAL: RIGHT";
+	new_cmd = 142;
+}
+else if (x == 47) {
+	cmd_bab = "STEAL: RIGHT";
+	new_cmd = 142;
+}
+else if (x == 48) {
+	cmd_bab = "STEAL: RIGHT";
+	new_cmd = 142;
+}
+
+else if (x == 49) {
+	cmd_bab = "REBOOT: Babbage Block 1";
+	Reboot_Byte(1);
+	new_cmd = 151;
+}
+else if (x == 50) {
+	cmd_bab = "REBOOT: Babbage Block 2";
+	Reboot_Byte(2);
+	new_cmd = 151;
+}
+else if (x == 51) {
+	cmd_bab = "REBOOT: Babbage Block 3";
+	Reboot_Byte(3);
+	new_cmd = 151;
+}
+else if (x == 52) {
+	cmd_bab = "REBOOT: Babbage Block 4";
+	Reboot_Byte(4);
+	new_cmd = 151;
+}
+
+else if (x == 53) {
+	cmd_bab = "REBOOT: Babbage Block 1";
+	Reboot_Byte(1);
+	new_cmd = 151;
+}
+else if (x == 54) {
+	cmd_bab = "REBOOT: Babbage Block 2";
+	Reboot_Byte(2);
+	new_cmd = 151;
+}
+else if (x == 55) {
+	cmd_bab = "REBOOT: Babbage Block 3";
+	Reboot_Byte(3);
+	new_cmd = 151;
+}
+else if (x == 56) {
+	cmd_bab = "REBOOT: Babbage Block 4";
+	Reboot_Byte(4);
+	new_cmd = 151;
+}
+
+
+else if (x == 57) {
+    	cmd_bab = "SCRAMBLE ALL";
+	new_cmd = 161;
+}
+
+else if (x == 58) {
+    	cmd_bab = "SCRAMBLE USER";
+	new_cmd = 161;
+}
+
+else if (x == 59) {
+    	cmd_bab = "SCRAMBLE Block 1";
+	new_cmd = 161;	
+}
+else if (x == 60) {
+   	cmd_bab = "SCRAMBLE Block 2";
+	new_cmd = 161;
+}
+else if (x == 61) {
+    	cmd_bab = "SCRAMBLE Block 3";
+	new_cmd = 161;
+}
+else if (x == 62) {
+    	cmd_bab = "SCRAMBLE Block 4";
+	new_cmd = 161;
+}
+
+
+else if (x == 63) {
+    	cmd_bab = "SHIFT: LEFT";
+	new_cmd = 163;
+}
+else if (x == 64) {
+    	cmd_bab = "SHIFT: RIGHT";
+	new_cmd = 163;
+}
+
+return [cmd_bab, new_cmd]
+	
+}
+
+
+
+
+
+function Babbage()
+{
+	// Reset new command
+	new_cmd = last_cmd
+	
+	if (repeat_yn == true)
+	{
+		do
+		{
+			// Generate random number (1-65) to define which command
+			var x = Math.floor((Math.random() * 64) + 1);
+
+			// Get appropriate command
+			var cmd_array = Get_Cmd(x);
+
+			var cmd_bab = cmd_array[0];
+			var new_cmd = cmd_array[1];		
+
+		}
+		while (new_cmd == last_cmd);
+
+	}
+	else
+	{
+		// Generate random number (1-65) to define which command
+		var x = Math.floor((Math.random() * 64) + 1);
+
+		// Get appropriate command
+		var cmd_array = Get_Cmd(x);
+
+		var cmd_bab = cmd_array[0];
+		var new_cmd = cmd_array[1];
+	}
+
+	document.getElementById("command_text").innerHTML = cmd_bab;
+	last_cmd = new_cmd;
+	
+
+}
+
+function Reboot_Byte(block_id)
+{	
+	// Generate 2 x random numbers (0/1) to refresh a single block
+	// [i.e. 2 x adjacent bits]
+
+	if (block_id == 1)
+	{
+	var r1 = Math.random() >= 0.5;
+	var r2 = Math.random() >= 0.5;
+
+	if (r1 == 1)
+	{var b1 = "1";}
+	else
+	{var b1 = "0";}
+
+	if (r2 == 1)
+	{var b2 = "1";}
+	else
+	{var b2 = "0";}
+	
+	// Display target byte
+	var block_1 = b1.concat(b2);	
+	document.getElementById("bit_1").innerHTML = block_1
+
+	var yy = document.getElementById('bit_1');
+      	yy.style.color = '#FF0000';
+
+	}
+	
+
+	if (block_id == 2)
+	{
+	var r3 = Math.random() >= 0.5;
+	var r4 = Math.random() >= 0.5;
+
+	if (r3 == 1)
+	{var b3 = "1";}
+	else
+	{var b3 = "0";}
+
+	if (r4 == 1)
+	{var b4 = "1";}
+	else
+	{var b4 = "0";}
+
+	// Display target byte
+	var block_2 = b3.concat(b4);	
+	document.getElementById("bit_2").innerHTML = block_2
+	
+	var yy = document.getElementById('bit_2');
+      	yy.style.color = '#FF0000';
+
+	}
+
+
+
+	if (block_id == 3)
+	{
+	var r5 = Math.random() >= 0.5;
+	var r6 = Math.random() >= 0.5;
+
+	if (r5 == 1)
+	{var b5 = "1";}
+	else
+	{var b5 = "0";}
+
+	if (r6 == 1)
+	{var b6 = "1";}
+	else
+	{var b6 = "0";}
+
+	// Display target byte
+	var block_3 = b5.concat(b6);	
+	document.getElementById("bit_3").innerHTML = block_3
+		
+	var yy = document.getElementById('bit_3');
+      	yy.style.color = '#FF0000';
+
+	}
+
+
+
+	if (block_id == 4)
+	{
+	var r7 = Math.random() >= 0.5;
+	var r8 = Math.random() >= 0.5;
+
+	if (r7 == 1)
+	{var b7 = "1";}
+	else
+	{var b7 = "0";}
+
+	if (r8 == 1)
+	{var b8 = "1";}
+	else
+	{var b8 = "0";}
+
+	// Display target byte
+	var block_4 = b7.concat(b8);	
+	document.getElementById("bit_4").innerHTML = block_4
+		
+	var yy = document.getElementById('bit_4');
+      	yy.style.color = '#FF0000';
+
+	}
+	
+
+	
+}
+
+
+
+
+
+function Reboot_All()
+{
+
+	// Generate 8 x random numbers (0/1) to generate the target byte
+	var r1 = Math.random() >= 0.5;
+	var r2 = Math.random() >= 0.5;
+	var r3 = Math.random() >= 0.5;
+	var r4 = Math.random() >= 0.5;
+	var r5 = Math.random() >= 0.5;
+	var r6 = Math.random() >= 0.5;
+	var r7 = Math.random() >= 0.5;
+	var r8 = Math.random() >= 0.5;
+
+	if (r1 == 1)
+	{
+	var b1 = "1";
+	}
+	else
+	{
+	var b1 = "0";
+	}
+
+	if (r2 == 1)
+	{
+	var b2 = "1";
+	}
+	else
+	{
+	var b2 = "0";
+	}
+
+	if (r3 == 1)
+	{
+	var b3 = "1";
+	}
+	else
+	{
+	var b3 = "0";
+	}
+
+	if (r4 == 1)
+	{
+	var b4 = "1";
+	}
+	else
+	{
+	var b4 = "0";
+	}
+
+	if (r5 == 1)
+	{
+	var b5 = "1";
+	}
+	else
+	{
+	var b5 = "0";
+	}
+
+	if (r6 == 1)
+	{
+	var b6 = "1";
+	}
+	else
+	{
+	var b6 = "0";
+	}
+
+	if (7 == 1)
+	{
+	var b7 = "1";
+	}
+	else
+	{
+	var b7 = "0";
+	}
+
+	if (r8 == 1)
+	{
+	var b8 = "1";
+	}
+	else
+	{
+	var b8 = "0";
+	}
+
+	var block_1 = b1.concat(b2);
+	var block_2 = b3.concat(b4);
+	var block_3 = b5.concat(b6);
+	var block_4 = b7.concat(b8);
+
+	
+
+	// Display target byte
+	document.getElementById("bit_1").innerHTML = block_1
+	document.getElementById("bit_2").innerHTML = block_2
+	document.getElementById("bit_3").innerHTML = block_3
+	document.getElementById("bit_4").innerHTML = block_4
+	
+	// Reset command text
+	document.getElementById("command_text").innerHTML = ""
+	
+	// Reset the 'last command' check (this is a new round)
+	last_cmd = -999
+	
+}
+
+
+
+function Reset()
+{
+	// Reload page
+	location.reload();
+	
+}
+
+
+
+
+
+</script>
+
+</center>
+</body>
+</html>
